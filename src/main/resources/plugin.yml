@@ -1,0 +1,4 @@
+main: ${group}.${name}.Arrow
+prefix: ARW
+name: Arrow
+version: $version
