@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -15,15 +16,26 @@ version = "${rootProject.property("major")}.${rootProject.property("minor")}.${r
 
 val commit = runCommand(arrayListOf("git", "rev-parse", "HEAD"))
 
+buildConfig {
+    packageName("xyz.brettb.arrow")
+    className("ArrowInfo")
+    buildConfigField("String", "VERSION", "\"${version}\"")
+    buildConfigField("String", "COMMIT", "\"$commit\"")
+    buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
+}
+
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://rayzr.dev/repo/")
 }
 
 dependencies {
-    listOf("stdlib-jdk16", "reflect").forEach { implementation(kotlin(it)) }
+    listOf("stdlib-jdk8", "reflect").forEach { api(kotlin(it)) }
 
-    compileOnly("org.bukkit:bukkit:")
+    api("com.github.cryptomorin:XSeries:9.1.0") { isTransitive = false }
+    api("me.ialistannen:MiniNBT:1.0.2")
+    compileOnly("org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT")
 }
 
 val compileKotlin: KotlinCompile by tasks
@@ -39,6 +51,10 @@ tasks {
         filesMatching("*.yml") {
             expand(project.properties)
         }
+    }
+
+    named<ShadowJar>("shadowJar") {
+        relocate("com.cryptomorin.xseries", "xyz.brettb.arrow.util")
     }
 }
 

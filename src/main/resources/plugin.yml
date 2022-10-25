@@ -2,3 +2,5 @@ main: ${group}.${name}.Arrow
 prefix: ARW
 name: Arrow
 version: $version
+description: Plugin made for making plugins
+api-version: "1.13"
