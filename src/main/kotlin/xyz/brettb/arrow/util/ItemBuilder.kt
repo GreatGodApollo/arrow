@@ -6,15 +6,18 @@ import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import java.util.*
 import java.util.function.Consumer
 
 class ItemBuilder private constructor(private var item: ItemStack) {
-    fun mutateMeta(mutator: Consumer<ItemMeta?>): ItemBuilder {
-        val im = item.itemMeta
-        mutator.accept(im)
-        item.itemMeta = im
+    fun mutateMeta(mutator: (im: ItemMeta) -> Unit): ItemBuilder {
+        if (this.item.hasItemMeta()) {
+            val im = item.itemMeta!!
+            mutator(im)
+            item.itemMeta = im
+        }
         return this
     }
 
@@ -23,53 +26,52 @@ class ItemBuilder private constructor(private var item: ItemStack) {
         return this
     }
 
-    fun setDisplayName(name: String?): ItemBuilder {
-        return mutateMeta { im: ItemMeta? -> im!!.setDisplayName(name) }
+    fun setDisplayName(name: String): ItemBuilder {
+        return mutateMeta { im: ItemMeta -> im.setDisplayName(name) }
     }
 
-    fun setDurability(durability: Short): ItemBuilder {
-        item.durability = durability
-        return this
+    fun setDurability(durability: Int): ItemBuilder {
+        return mutateMeta { im: ItemMeta -> if (im is Damageable) im.damage = durability}
     }
 
-    fun setLore(vararg lore: String?): ItemBuilder {
-        return mutateMeta { im: ItemMeta? -> im!!.lore = Arrays.asList(*lore) }
+    fun setLore(vararg lore: String): ItemBuilder {
+        return mutateMeta { im: ItemMeta -> im.lore = listOf(*lore) }
     }
 
-    fun setLore(lore: List<String?>?): ItemBuilder {
-        return mutateMeta { im: ItemMeta? -> im!!.lore = lore }
+    fun setLore(lore: List<String>): ItemBuilder {
+        return mutateMeta { im: ItemMeta -> im.lore = lore }
     }
 
-    fun addLore(vararg lore: String?): ItemBuilder {
+    fun addLore(vararg lore: String): ItemBuilder {
         val newLore = item.itemMeta!!.lore
-        newLore!!.addAll(Arrays.asList(*lore))
-        return mutateMeta { im: ItemMeta? -> im!!.lore = newLore }
+        newLore!!.addAll(listOf(*lore))
+        return mutateMeta { im: ItemMeta -> im.lore = newLore }
     }
 
-    fun addLore(lore: List<String>?): ItemBuilder {
+    fun addLore(lore: List<String>): ItemBuilder {
         val newLore = item.itemMeta!!.lore
-        newLore!!.addAll(lore!!)
-        return mutateMeta { im: ItemMeta? -> im!!.lore = newLore }
+        newLore!!.addAll(lore)
+        return mutateMeta { im: ItemMeta? -> im.lore = newLore }
     }
 
-    fun addEnchantment(enchant: Enchantment?, level: Int, ignoreRestrictions: Boolean): ItemBuilder {
-        return mutateMeta { im: ItemMeta? -> im!!.addEnchant(enchant!!, level, ignoreRestrictions) }
+    fun addEnchantment(enchant: Enchantment, level: Int, ignoreRestrictions: Boolean): ItemBuilder {
+        return mutateMeta { im: ItemMeta -> im.addEnchant(enchant, level, ignoreRestrictions) }
     }
 
-    fun addEnchantments(enchants: Map<Enchantment?, Int>, ignoreRestrictions: Boolean): ItemBuilder {
-        enchants.forEach { (enchant: Enchantment?, level: Int) -> addEnchantment(enchant, level, ignoreRestrictions) }
+    fun addEnchantments(enchants: Map<Enchantment, Int>, ignoreRestrictions: Boolean): ItemBuilder {
+        enchants.forEach { (enchant: Enchantment, level: Int) -> addEnchantment(enchant, level, ignoreRestrictions) }
         return this
     }
 
     fun addItemFlags(vararg flags: ItemFlag): ItemBuilder {
-        return mutateMeta { im: ItemMeta? -> im!!.addItemFlags(*flags) }
+        return mutateMeta { im: ItemMeta -> im.addItemFlags(*flags) }
     }
 
     fun setUnbreakable(unbreakable: Boolean): ItemBuilder {
-        return mutateMeta { im: ItemMeta? -> im!!.isUnbreakable = unbreakable }
+        return mutateMeta { im: ItemMeta -> im.isUnbreakable = unbreakable }
     }
 
-    fun setNBTTag(key: String?, value: String?): ItemBuilder {
+    fun setNBTTag(key: String, value: String): ItemBuilder {
         val nbt = ItemNBTUtil.getTag(item)
         nbt.setString(key, value)
         item = ItemNBTUtil.setNBTTag(nbt, item)
@@ -81,8 +83,8 @@ class ItemBuilder private constructor(private var item: ItemStack) {
     }
 
     companion object {
-        fun of(mat: Material?): ItemBuilder {
-            return of(ItemStack(mat!!))
+        fun of(mat: Material): ItemBuilder {
+            return of(ItemStack(mat))
         }
 
         fun of(mat: XMaterial): ItemBuilder {
