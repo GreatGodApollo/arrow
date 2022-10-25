@@ -12,12 +12,10 @@ import java.util.*
 import java.util.function.Consumer
 
 class ItemBuilder private constructor(private var item: ItemStack) {
-    fun mutateMeta(mutator: (im: ItemMeta) -> Unit): ItemBuilder {
-        if (this.item.hasItemMeta()) {
-            val im = item.itemMeta!!
-            mutator(im)
-            item.itemMeta = im
-        }
+    fun mutateMeta(mutator: ItemMeta.() -> Unit ): ItemBuilder {
+        val im = item.itemMeta
+        if (im != null) mutator(im)
+        item.itemMeta = im
         return this
     }
 
@@ -27,35 +25,35 @@ class ItemBuilder private constructor(private var item: ItemStack) {
     }
 
     fun setDisplayName(name: String): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> im.setDisplayName(name) }
+        return mutateMeta { setDisplayName(name) }
     }
 
     fun setDurability(durability: Int): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> if (im is Damageable) im.damage = durability}
+        return mutateMeta { if (this is Damageable) damage = durability}
     }
 
     fun setLore(vararg lore: String): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> im.lore = listOf(*lore) }
+        return mutateMeta { this.lore = listOf(*lore)}
     }
 
     fun setLore(lore: List<String>): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> im.lore = lore }
+        return mutateMeta { this.lore = lore }
     }
 
     fun addLore(vararg lore: String): ItemBuilder {
         val newLore = item.itemMeta!!.lore
         newLore!!.addAll(listOf(*lore))
-        return mutateMeta { im: ItemMeta -> im.lore = newLore }
+        return mutateMeta { this.lore = newLore }
     }
 
     fun addLore(lore: List<String>): ItemBuilder {
         val newLore = item.itemMeta!!.lore
         newLore!!.addAll(lore)
-        return mutateMeta { im: ItemMeta -> im.lore = newLore }
+        return mutateMeta { this.lore = newLore }
     }
 
     fun addEnchantment(enchant: Enchantment, level: Int, ignoreRestrictions: Boolean): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> im.addEnchant(enchant, level, ignoreRestrictions) }
+        return mutateMeta { this.addEnchant(enchant, level, ignoreRestrictions) }
     }
 
     fun addEnchantments(enchants: Map<Enchantment, Int>, ignoreRestrictions: Boolean): ItemBuilder {
@@ -64,11 +62,11 @@ class ItemBuilder private constructor(private var item: ItemStack) {
     }
 
     fun addItemFlags(vararg flags: ItemFlag): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> im.addItemFlags(*flags) }
+        return mutateMeta { this.addItemFlags(*flags) }
     }
 
     fun setUnbreakable(unbreakable: Boolean): ItemBuilder {
-        return mutateMeta { im: ItemMeta -> im.isUnbreakable = unbreakable }
+        return mutateMeta { this.isUnbreakable = unbreakable }
     }
 
     fun setNBTTag(key: String, value: String): ItemBuilder {

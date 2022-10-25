@@ -33,7 +33,9 @@ repositories {
 dependencies {
     listOf("stdlib-jdk8", "reflect").forEach { api(kotlin(it)) }
 
-    api("com.github.cryptomorin:XSeries:9.1.0") { isTransitive = false }
+    api("com.github.cryptomorin:XSeries:9.1.0") {
+        isTransitive = false
+    }
     api("me.ialistannen:MiniNBT:1.0.2")
     compileOnly("org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT")
 }
@@ -52,17 +54,13 @@ tasks {
             expand(project.properties)
         }
     }
-
-    named<ShadowJar>("shadowJar") {
-        relocate("com.cryptomorin.xseries", "xyz.brettb.arrow.util")
-    }
 }
 
 publishing {
     repositories {
         maven {
             name = "internal.repo"
-            url = uri("$path/../../maven-repo")
+            url = uri("$path/../../../maven-repo")
         }
     }
     publications {

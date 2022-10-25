@@ -126,44 +126,43 @@ abstract class ArrowPluginCommand(
                     && !playerOverridden
                 )
                     throw PermissionException("You do not have permission for this command!")
-
-                // If we have to use sub-commands, make sure we set one.
-                if (useSubCommandsOnly) {
-                    if (args.isEmpty())
-                        throw ArgumentRequirementException("You must specify a sub-command for this command!")
-
-                    subCommand = getSubCommandFor(args.first())
-
-                    if (subCommand == null)
-                        throw ArgumentRequirementException("The sub-command you specified is invalid!")
-                }
-
-                // We have a sub command!
-                if (subCommand != null) {
-                    val choppedArgs = if (args.size < 2) arrayOf() else args.copyOfRange(1, args.size)
-                    handlePreSubCommand(sender, choppedArgs, subCommand)
-                    subCommand.onCommand(sender, command, alias, choppedArgs)
-                    try {
-                        handlePostSubCommand(sender, args, subCommand)
-                    } catch (ignored: EmptyHandlerException) {
-                    }
-                    return true
-                }
-
-                if (javaClass.annotations.find { it is AsyncCommand } != null) {
-                    RunnableShorthand(this.plugin!!).async().with {
-                        try {
-                            actualDispatch(sender, alias, args)
-                        } catch (t: CommandException) {
-                            handleCommandException(t, args, sender)
-                        } catch (t: Exception) {
-                            handleCommandException(UnhandledCommandException(t), args, sender)
-                        }
-                    }.go()
-                } else
-                    actualDispatch(sender, alias, args)
-
             }
+
+            // If we have to use sub-commands, make sure we set one.
+            if (useSubCommandsOnly) {
+                if (args.isEmpty())
+                    throw ArgumentRequirementException("You must specify a sub-command for this command!")
+
+                subCommand = getSubCommandFor(args.first())
+
+                if (subCommand == null)
+                    throw ArgumentRequirementException("The sub-command you specified is invalid!")
+            }
+
+            // We have a sub command!
+            if (subCommand != null) {
+                val choppedArgs = if (args.size < 2) arrayOf() else args.copyOfRange(1, args.size)
+                handlePreSubCommand(sender, choppedArgs, subCommand)
+                subCommand.onCommand(sender, command, alias, choppedArgs)
+                try {
+                    handlePostSubCommand(sender, args, subCommand)
+                } catch (ignored: EmptyHandlerException) {
+                }
+                return true
+            }
+
+            if (javaClass.annotations.find { it is AsyncCommand } != null) {
+                RunnableShorthand(this.plugin!!).async().with {
+                    try {
+                        actualDispatch(sender, alias, args)
+                    } catch (t: CommandException) {
+                        handleCommandException(t, args, sender)
+                    } catch (t: Exception) {
+                        handleCommandException(UnhandledCommandException(t), args, sender)
+                    }
+                }.go()
+            } else
+                actualDispatch(sender, alias, args)
         } catch (t: CommandException) {
             handleCommandException(t, args, sender)
         } catch (t: Exception) {

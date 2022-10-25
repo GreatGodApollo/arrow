@@ -59,7 +59,7 @@ abstract class ArrowPlugin : JavaPlugin() {
 
             val commandMap: CommandMap
             try {
-                val pm = server.pluginManager
+                val pm = Bukkit.getPluginManager()
                 val commandMapField = pm.javaClass.getDeclaredField("commandMap")
                 commandMapField.isAccessible = true
                 commandMap = commandMapField.get(pm) as CommandMap

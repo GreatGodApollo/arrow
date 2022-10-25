@@ -13,11 +13,11 @@ class Arrow : ArrowPlugin() {
 
     override fun onPluginEnabled() {
         registerListener(ArrowGuiListener(this))
-        registerCommand(ArrowCommand)
+        registerCommand(ArrowCommand())
     }
 
     @ArrowCommandMeta("Arrow plugin library", ["arw"])
-    object ArrowCommand : ArrowPluginCommand("arrow") {
+    class ArrowCommand : ArrowPluginCommand("arrow") {
         override fun handleCommandUnspecific(ctx: CommandContext) {
             ctx.reply("${plugin!!.chatPrefix} ${ChatColor.DARK_AQUA} This server is using Arrow ${ChatColor.GREEN}v${ArrowInfo.VERSION}")
         }
