@@ -51,7 +51,7 @@ class ItemBuilder private constructor(private var item: ItemStack) {
     fun addLore(lore: List<String>): ItemBuilder {
         val newLore = item.itemMeta!!.lore
         newLore!!.addAll(lore)
-        return mutateMeta { im: ItemMeta? -> im.lore = newLore }
+        return mutateMeta { im: ItemMeta -> im.lore = newLore }
     }
 
     fun addEnchantment(enchant: Enchantment, level: Int, ignoreRestrictions: Boolean): ItemBuilder {
