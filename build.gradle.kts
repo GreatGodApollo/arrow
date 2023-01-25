@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -56,15 +55,22 @@ tasks {
     }
 }
 
+
 publishing {
     repositories {
         maven {
-            name = "internal.repo"
-            url = uri("$path/../../../maven-repo")
+            name = "brettbRepo"
+            url = uri("https://repo.brettb.xyz/releases")
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
         }
     }
     publications {
         create<MavenPublication>("maven") {
+            groupId = "xyz.brettb"
+            artifactId = "arrow"
             from(components["java"])
             artifact(tasks["sourcesJar"])
         }
