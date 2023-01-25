@@ -1,4 +1,4 @@
-package xyz.brettb.arrow.command
+package xyz.brettb.arrow.entities.command
 
 import org.bukkit.ChatColor
 import org.bukkit.command.BlockCommandSender
@@ -9,7 +9,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
-import xyz.brettb.arrow.plugin.ArrowPlugin
+import xyz.brettb.arrow.errors.*
+import xyz.brettb.arrow.entities.plugin.ArrowPlugin
 import xyz.brettb.arrow.util.RunnableShorthand
 import xyz.brettb.arrow.util.getInsensitive
 import xyz.brettb.arrow.util.putInsensitive
@@ -29,12 +30,14 @@ abstract class ArrowPluginCommand(
     private var superCommand: ArrowPluginCommand? = null
 
     @Suppress("MemberVisibilityCanBePrivate")
-    val commandMeta: ArrowCommandMeta? =
+    val commandMeta: ArrowCommandMeta? by lazy {
         this.javaClass.annotations.find { it is ArrowCommandMeta } as? ArrowCommandMeta
+    }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    val commandPermission: ArrowCommandPermission? =
+    val commandPermission: ArrowCommandPermission? by lazy {
         this.javaClass.annotations.find { it is ArrowCommandPermission } as? ArrowCommandPermission
+    }
 
     internal var plugin: ArrowPlugin? = null
         get() = superCommand?.plugin ?: field
@@ -55,8 +58,8 @@ abstract class ArrowPluginCommand(
         subCommands.forEach { cmd ->
             if (superCommand != null) throw IllegalArgumentException("The command you attempted to register already has a super command!")
             this._subCommands.putInsensitive(cmd.name, Pair(cmd, false))
-            if (cmd.commandMeta != null && cmd.commandMeta.aliases.isNotEmpty())
-                cmd.commandMeta.aliases.filter { it.isNotEmpty() }.forEach { a ->
+            if (cmd.commandMeta != null && cmd.commandMeta!!.aliases.isNotEmpty())
+                cmd.commandMeta!!.aliases.filter { it.isNotEmpty() }.forEach { a ->
                     this._subCommands.putInsensitive(a, Pair(cmd, true))
                 }
             cmd.superCommand = this
@@ -117,12 +120,12 @@ abstract class ArrowPluginCommand(
 
                 // The command source is a player
                 if (sender is Player)
-                    if (!(commandPermission.userOverrides.contains(sender.uniqueId.toString())))
+                    if (!(commandPermission!!.userOverrides.contains(sender.uniqueId.toString())))
                         playerOverridden = false
 
                 // Check if the sender has permissions
-                if (!sender.hasPermission(commandPermission.value)
-                    && !(sender.isOp && commandPermission.isOpExempt)
+                if (!sender.hasPermission(commandPermission!!.value)
+                    && !(sender.isOp && commandPermission!!.isOpExempt)
                     && !playerOverridden
                 )
                     throw PermissionException("You do not have permission for this command!")
@@ -291,7 +294,7 @@ abstract class ArrowPluginCommand(
         args: Array<out String>
     ): List<String> {
         if (commandPermission != null) {
-            if (!sender.hasPermission(commandPermission.value) && !(sender.isOp && commandPermission.isOpExempt)) return emptyList()
+            if (!sender.hasPermission(commandPermission!!.value) && !(sender.isOp && commandPermission!!.isOpExempt)) return emptyList()
         }
 
         if (args.size > 1) {

@@ -1,7 +1,10 @@
-package xyz.brettb.arrow.gui
+package xyz.brettb.arrow.entities.gui.components
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import xyz.brettb.arrow.entities.gui.ArrowGUI
+import xyz.brettb.arrow.util.Dimension
+import xyz.brettb.arrow.events.ArrowClickEvent
 import xyz.brettb.arrow.util.isInvalid
 
 abstract class ArrowGUIComponent(

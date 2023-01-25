@@ -1,10 +1,9 @@
-package xyz.brettb.arrow.gui.components
+package xyz.brettb.arrow.entities.gui.components
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import xyz.brettb.arrow.gui.ArrowClickEvent
-import xyz.brettb.arrow.gui.ArrowGUIComponent
-import xyz.brettb.arrow.gui.Dimension
+import xyz.brettb.arrow.events.ArrowClickEvent
+import xyz.brettb.arrow.util.Dimension
 import xyz.brettb.arrow.util.ItemBuilder
 import xyz.brettb.arrow.util.colorize
 import xyz.brettb.arrow.util.colorizeText

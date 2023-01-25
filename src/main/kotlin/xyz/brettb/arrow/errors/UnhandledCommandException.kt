@@ -1,7 +1,7 @@
-package xyz.brettb.arrow.command
+package xyz.brettb.arrow.errors
 
-import org.bukkit.ChatColor
 import org.bukkit.command.CommandException
+import xyz.brettb.arrow.entities.command.ArrowPluginCommand
 
 class UnhandledCommandException(val causingException: Exception) :
     CommandException("Unhandled exception " + causingException.message), FriendlyException {

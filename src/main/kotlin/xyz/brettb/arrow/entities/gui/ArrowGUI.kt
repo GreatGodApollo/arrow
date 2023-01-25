@@ -1,4 +1,4 @@
-package xyz.brettb.arrow.gui
+package xyz.brettb.arrow.entities.gui
 
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -6,6 +6,9 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import xyz.brettb.arrow.entities.gui.components.ArrowGUIComponent
+import xyz.brettb.arrow.events.ArrowClickEvent
+import xyz.brettb.arrow.util.Dimension
 import xyz.brettb.arrow.util.colorizeText
 
 class ArrowGUI(

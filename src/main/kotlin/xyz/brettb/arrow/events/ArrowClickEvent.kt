@@ -1,8 +1,10 @@
-package xyz.brettb.arrow.gui
+package xyz.brettb.arrow.events
 
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
+import xyz.brettb.arrow.entities.gui.ArrowGUI
+import xyz.brettb.arrow.util.Dimension
 
 data class ArrowClickEvent(
     val player: Player,

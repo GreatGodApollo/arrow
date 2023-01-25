@@ -1,8 +1,8 @@
-package xyz.brettb.arrow.gui.components
+package xyz.brettb.arrow.entities.gui.components
 
 import org.bukkit.inventory.ItemStack
-import xyz.brettb.arrow.gui.ArrowClickEvent
-import xyz.brettb.arrow.gui.Dimension
+import xyz.brettb.arrow.events.ArrowClickEvent
+import xyz.brettb.arrow.util.Dimension
 
 class Button : Label {
     private val clickHandler: (ce: ArrowClickEvent) -> Unit

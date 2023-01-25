@@ -1,4 +1,4 @@
-package xyz.brettb.arrow.command
+package xyz.brettb.arrow.entities.command
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)
 @Retention(AnnotationRetention.RUNTIME)

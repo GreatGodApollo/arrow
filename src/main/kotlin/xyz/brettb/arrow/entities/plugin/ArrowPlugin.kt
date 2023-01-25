@@ -1,13 +1,12 @@
-package xyz.brettb.arrow.plugin
+package xyz.brettb.arrow.entities.plugin
 
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.command.CommandMap
 import org.bukkit.command.PluginCommand
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
-import xyz.brettb.arrow.command.ArrowPluginCommand
+import xyz.brettb.arrow.entities.command.ArrowPluginCommand
 import xyz.brettb.arrow.util.colorizeText
 
 
@@ -16,15 +15,13 @@ abstract class ArrowPlugin : JavaPlugin() {
      * Runs when the plugin is enabled
      */
     @Throws(Exception::class)
-    protected open fun onPluginEnabled() {
-    }
+    protected open fun onPluginEnabled() {}
 
     /**
      * Runs when the plugin is disabled
      */
     @Throws(Exception::class)
-    protected open fun onPluginDisabled() {
-    }
+    protected open fun onPluginDisabled() {}
 
     final override fun onEnable() {
         try {

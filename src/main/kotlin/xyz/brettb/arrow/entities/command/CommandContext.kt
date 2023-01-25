@@ -1,4 +1,4 @@
-package xyz.brettb.arrow.command
+package xyz.brettb.arrow.entities.command
 
 import org.bukkit.command.CommandSender
 

@@ -3,7 +3,7 @@ package xyz.brettb.arrow.util
 import com.cryptomorin.xseries.XMaterial
 import org.bukkit.ChatColor
 import org.bukkit.inventory.ItemStack
-import xyz.brettb.arrow.command.ArrowPluginCommand
+import xyz.brettb.arrow.entities.command.ArrowPluginCommand
 
 fun MutableMap<String, Pair<ArrowPluginCommand, Boolean>>.putInsensitive(
     k: String,

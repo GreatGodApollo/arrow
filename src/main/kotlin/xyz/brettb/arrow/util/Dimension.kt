@@ -1,4 +1,4 @@
-package xyz.brettb.arrow.gui
+package xyz.brettb.arrow.util
 
 import kotlin.math.absoluteValue
 import kotlin.math.max
