@@ -39,7 +39,7 @@ abstract class ArrowPluginCommand(
         this.javaClass.annotations.find { it is ArrowCommandPermission } as? ArrowCommandPermission
     }
 
-    internal var plugin: ArrowPlugin? = null
+    var plugin: ArrowPlugin? = null
         get() = superCommand?.plugin ?: field
 
     @Suppress("unused")
